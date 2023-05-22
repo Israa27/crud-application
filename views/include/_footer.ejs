@@ -1,0 +1,50 @@
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+const form = document.querySelector('#update_user');
+
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  // Get the form data
+  const formData = new FormData(form);
+  const id = formData.get('id');
+  const name = formData.get('name');
+  const email = formData.get('email');
+  const gender = formData.get('gender');
+  const status = formData.get('status');
+
+  // Create an object with the form data
+  const data = { name, email, gender, status };
+
+  try {
+    const response = await fetch(`http://localhost:3000/api/users/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error('Update request failed.');
+    }
+
+    const updatedUser = await response.json();
+
+    // Update the UI with the new values
+    document.querySelector(`input[name="name"]`).value = updatedUser.name;
+    document.querySelector(`input[name="email"]`).value = updatedUser.email;
+    document.querySelector(`input[value="${updatedUser.gender}"]`).checked = true;
+    document.querySelector(`input[value="${updatedUser.status}"]`).checked = true;
+
+    alert('Data Updated Successfully!');
+  } catch (error) {
+    console.error(error);
+    alert('Update request failed. Please try again.');
+  }
+});
+
+</script>
+
+</body>
+</html>
