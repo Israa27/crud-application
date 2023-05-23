@@ -61,31 +61,23 @@ exports.find = (req, res) => {
 
 
 exports.update = (req, res) => {
-  if (!req.body) {
+  if (Object.keys(req.body).length === 0) {
     return res.status(400).send({ message: "Data to update cannot be empty" });
   }
 
-  const id = req.params.id;
-  Userdb.findByIdAndUpdate({_id:id}, req.body, { useFindAndModify: false })
-    .then(data => {
-      if (!data) {
-        return res.status(404).send({ message: `Cannot update user with ID ${id}. User not found!` });
-      }
-
-      // Retrieve the updated user data
-      Userdb.findById(id)
-        .then(updatedUser => {
-          console.log("data:",updatedUser)
-          res.send(updatedUser);
-        })
-        .catch(err => {
-          res.status(500).send({ message: "Error retrieving updated user data" });
-        });
-    })
-    .catch(err => {
-      res.status(500).send({ message: "Error updating user information" });
-    });
+const id = req.params.id;
+Userdb.findByIdAndUpdate(id, req.body, { new: true })
+  .then(data => {
+    if (!data) {
+      return res.status(404).send({ message: `Cannot update user with ID ${id}. User not found!` });
+    }
+    return res.send({ data });
+  })
+  .catch(err => {
+    res.status(500).send({ message: "Error updating user information" });
+  });
 };
+
 
 
 // Delete information of user by user ID

@@ -1,59 +1,63 @@
-const axios =require('axios')
-const addUserForm = document.querySelector('#add_user');
 
-addUserForm.addEventListener('submit', (event) => {
-  event.preventDefault();
-  alert('Form data submitted');
+//Add User Function 
+if (document.getElementById('add_user')) {
+  document.getElementById('add_user').addEventListener('submit', (event) => {
+    event.preventDefault();
+    alert('Add User form data submitted');
+   
+    
+  });
+}
 
-  // Get the form data
-  const formData = new FormData(addUserForm);
-  const id = formData.get('id');
-  const name = formData.get('name');
-  const email = formData.get('email');
-  const gender = formData.get('gender');
-  const status = formData.get('status');
+//Update User Function
+if (document.getElementById('update_user')) {
+  document.getElementById('update_user').addEventListener('submit', (event) => {
+    event.preventDefault();
 
-  // Create an object with the form data
-  const data = { name, email, gender, status };
+    // Get the form data
+    const formData = new FormData(document.getElementById('update_user'));
+    const id = formData.get('id');
+    const name = formData.get('name');
+    const email = formData.get('email');
+    const gender = formData.get('gender');
+    const status = formData.get('status');
 
-  // Send the data to the server using Axios or any other method
-  // Example using Axios:
-  axios.post(`http://localhost:3000/api/users/${id}`, data)
-    .then(response => {
-      console.log(response.data);
-      alert('Data Updated Successfully!');
+    // Create an object with the form data
+    const data = { id, name, email, gender, status };
+
+    // Send the data to the server using Axios
+    axios({
+      method: 'put',
+      url: `http://localhost:3000/api/users/${id}`,
+      data: data
     })
-    .catch(error => {
-      console.error(error);
-    });
-});
+      .then(response => {
+        alert('Data Updated Successfully!');
+        window.location.href = "/";
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  });
+}
 
-
-const form = document.querySelector('#update_user');
-
-form.addEventListener('submit', (event) => {
-  event.preventDefault();
-  alert('Form data submitted');
-
-  // Get the form data
-  const formData = new FormData(form);
-  const id = formData.get('id');
-  const name = formData.get('name');
-  const email = formData.get('email');
-  const gender = formData.get('gender');
-  const status = formData.get('status');
-
-  // Create an object with the form data
-  const data = { name, email, gender, status };
-
-  // Send the data to the server using Axios or any other method
-  // Example using Axios:
-  axios.put(`http://localhost:3000/api/users/${id}`, data)
-    .then(response => {
-      console.log(response.data);
-      alert('Data Updated Successfully!');
+//Delete User Function
+if(window.location.pathname==='/'){
+ document.querySelector('.table tbody td a.delete').addEventListener('click', (event) => {
+    let id=this.getAttribute('data-id')
+    // Send the data to the server using Axios
+    axios({
+      method: 'delete',
+      url: `http://localhost:3000/api/users/${id}`,
+     
     })
-    .catch(error => {
-      console.error(error);
-    });
-});
+      .then(response => {
+        alert('Delete User Successfully!');
+        location.reload();
+      })
+      .catch(error => {
+        console.error(error);
+      });
+ 
+  })
+}

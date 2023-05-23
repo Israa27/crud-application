@@ -1,31 +1,37 @@
-const express=require('express')
-const app=express()
-const dotenv=require('dotenv')
-const morgan=require('morgan')
-const path=require('path')
-const bodyParser = require('body-parser')
-dotenv.config({path:'config.env'})
-const PORT=process.env.PORT || 8000
-const conncetDB=require('./server/database/connection')
+const express = require('express');
+const app = express();
+const dotenv = require('dotenv');
+const morgan = require('morgan');
+const path = require('path');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const connectDB = require('./server/database/connection');
 
+dotenv.config({ path: 'config.env' });
 
-app.use(bodyParser.urlencoded({extended:true}))
-//show requsets in console.log
-app.use(morgan('tiny'))
+const PORT = process.env.PORT || 8000;
 
-// set view engine
-app.set('view engine','ejs'); 
+app.use(cors()); // Enable CORS for all routes
 
-//mongodb connection
-conncetDB()
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-// load assets files
-app.use('/css', express.static(path.resolve(__dirname, "assets/css")))
-app.use('/img', express.static(path.resolve(__dirname, "assets/img")))
-app.use('/js', express.static(path.join(__dirname, 'assets/js')));
+// Show requests in console.log
+app.use(morgan('tiny'));
 
-//load routers
-app.use('/',require('./server/routes/router'))
+// Set view engine
+app.set('view engine', 'ejs');
 
+// MongoDB connection
+connectDB();
 
-app.listen(PORT,()=>console.log(`Server running on http://localhost:${PORT}`))
+// Load assets files
+app.use('/css', express.static(path.resolve(__dirname, 'assets/css')));
+app.use('/img', express.static(path.resolve(__dirname, 'assets/img')));
+app.use('/js', express.static(path.resolve(__dirname, 'assets/js')));
+
+// Load routers
+const router = require('./server/routes/router');
+app.use('/', router);
+
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
