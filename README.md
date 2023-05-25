@@ -31,15 +31,17 @@ MONGO_URL=mongodb+srv://<username>:<password>@<cluster-url>/mydatabase?retryWrit
 ```
 ## Usage
 1. Start the application:
-```npm start```
-2Open your browser and navigate to ```http://localhost:3000``` to access the application.
+```
+npm start
+```
+2. Open your browser and navigate to ```http://localhost:3000``` to access the application.
 
 3. The application supports the following CRUD operations:
 
 - Create: Click on the "Add User" button to create a new user entry. Fill in the required information such as name, email, gender, and status.
 - Read: The homepage displays a list of existing users with their information.
-- Update: Click on the "Edit" button next to a user to update their details.
-- Delete: Click on the "Delete" button next to a user to remove them from the list.
+- Update: Click on the "Edit Icon" button next to a user to update their details.
+- Delete: Click on the "Edit Icon" button next to a user to remove them from the list.
 
 ## Customization
 - You can modify the application's design and functionality by editing the relevant files in the views directories.
